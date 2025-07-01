@@ -67,4 +67,7 @@ Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 //reservasi
 Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi.create');
 Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
+Route::get('/reservasi/{id}/download', [ReservationController::class, 'download'])
+     ->name('reservasi.download');
+
 

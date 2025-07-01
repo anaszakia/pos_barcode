@@ -173,12 +173,12 @@
                 </h2>
             </div>
 
-            {{-- @if(session('success'))
+            @if(session('success'))
                 <div class="alert alert-success">
                     <i class="fas fa-check-circle me-2"></i>
                     {{ session('success') }}
                 </div>
-            @endif --}}
+            @endif
 
             <form action="{{ route('reservasi.store') }}" method="POST">
                 @csrf
@@ -325,41 +325,6 @@
                     <i class="fas fa-paper-plane me-2"></i>
                     Kirim Reservasi
                 </button>
-
-         <!-- Script untuk menampilkan SweetAlert jika ada session success -->
-        @if(session('success'))
-            <script>
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: '{{ session('success') }}',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#10b981',
-                    // timer: 20000,
-                    timerProgressBar: true,
-                    showConfirmButton: true,
-                    allowOutsideClick: true
-                });
-            </script>
-        @endif
-
-        <!-- Script untuk menampilkan SweetAlert jika ada session error -->
-        @if(session('error'))
-            <script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: '{{ session('error') }}',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#ef4444',
-                    // timer: 20000,
-                    timerProgressBar: true,
-                    showConfirmButton: true,
-                    allowOutsideClick: true
-                });
-            </script>
-        @endif
-
 
    <script>
     const qtyInputs = document.querySelectorAll('.menu-qty');

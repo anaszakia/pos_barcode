@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Menu;
 use App\Models\Reservation;
 use App\Models\ReservationItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -118,8 +119,19 @@ class ReservationController extends Controller
             }
         }
 
-        return redirect()->route('reservasi.create')->with('success',
-            "Reservasi berhasil! Kode Anda: <strong>$kode</strong>. Silakan konfirmasi dan kirim bukti pembayaran ke WhatsApp kami."
-        );
+        return redirect()
+        ->route('reservasi.download', $reservasi->id)
+        ->with('success', "Reservasi berhasil! Kode Anda: $kode. Bukti reservasi diunduh otomatis.");
     }
+
+    public function download($id)
+    {
+        $reservasi = Reservation::with('items.menu')->findOrFail($id);
+
+        $pdf = Pdf::loadView('customer.bukti_reservasi', compact('reservasi'))
+                ->setPaper('A6', 'portrait');   // slip kecil
+
+        $filename = 'Bukti_Reservasi_'.$reservasi->kode_reservasi.'.pdf';
+        return $pdf->download($filename);
+}
 }
