@@ -13,7 +13,7 @@
     </div>
     <div class="card-body">
 
-    <table class="table table-bordered">
+   <table class="table table-striped" id="table1">
         <thead>
             <tr>
                 <th>No</th>
@@ -220,4 +220,25 @@
         modalDelete.show();
     }
 </script>
+
+<!-- Simple DataTables -->
+    <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
+    <script>
+        // Initialize DataTable with options
+        let table1 = document.querySelector('#table1');
+        let dataTable = new simpleDatatables.DataTable(table1, {
+            searchable: true,
+            fixedHeight: false,
+            perPage: 10,
+            perPageSelect: [5, 10, 15, 20, 25],
+            sortable: true,
+            pagination: true,
+            labels: {
+                placeholder: "Cari Reservasi...",
+                perPage: "per halaman",
+                noRows: "Tidak ada data yang ditemukan",
+                info: "Menampilkan {start} sampai {end} dari {rows} data"
+            }
+        });
+    </script>
 @endpush
