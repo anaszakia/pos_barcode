@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DapurOrderController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\AdminDashboardController;
 
 
 
@@ -27,6 +28,8 @@ Route::middleware('auth')->post('/logout', [LoginController::class, 'logout'])->
 // ✅ ADMIN
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])
+        ->name('dashboard');   // nama = admin.dashboard
 
     Route::resource('kategori', KategoriController::class);
     Route::resource('menu', MenuController::class);
@@ -46,6 +49,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // ✅ KASIR
 Route::middleware(['auth', 'role:kasir'])->prefix('kasir')->name('kasir.')->group(function () {
     Route::get('/dashboard', fn() => view('kasir.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\KasirDashboardController::class, 'index'])
+        ->name('dashboard');   // nama = admin.dashboard
 
     Route::resource('orderan', OrderanController::class)->only(['index', 'show', 'print', 'store', 'update']);
     Route::get('/orderan/{id}/print', [OrderanController::class, 'print'])->name('orderan.print');

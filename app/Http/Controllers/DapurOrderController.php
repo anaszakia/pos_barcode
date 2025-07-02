@@ -46,7 +46,7 @@ class DapurOrderController extends Controller
     public function selesaiReservasi($id)
     {
         $reservasi = Reservation::findOrFail($id);
-        $reservasi->status_pembayaran = 'selesai'; // atau bisa tambah kolom status_kitchen
+        $reservasi->status_pembayaran = 'selesai'; 
         $reservasi->save();
 
         return back()->with('success', 'Reservasi ditandai selesai');
@@ -65,7 +65,7 @@ class DapurOrderController extends Controller
         // Reservasi yang SUDAH dibayar (status_pembayaran = sukses) & untuk tanggal hari ini
         $reservations = Reservation::with(['items.menu'])
             ->where('status_pembayaran', 'sukses')
-            ->where('status_reservasi', '!=', 'selesai') // ✅ Tambahkan pengecekan status_reservasi
+            ->where('status_reservasi', '!=', 'selesai') 
             ->whereDate('tanggal', Carbon::today())
             ->latest()
             ->get();
