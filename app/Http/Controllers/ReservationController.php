@@ -106,6 +106,7 @@ class ReservationController extends Controller
             'status_pembayaran' => 'pending',
             'metode_dp' => $request->metode_dp,
             'jumlah_bayar' => $grandTotal,
+            'status_reservasi' => 'pending',
         ]);
 
         // Simpan item menu ke tabel reservation_items

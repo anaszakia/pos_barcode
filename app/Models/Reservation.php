@@ -20,7 +20,8 @@ class Reservation extends Model
         'status_pembayaran',
         'metode_dp',
         'jumlah_bayar',
-        'catatan'
+        'catatan',
+        'status_reservasi'
     ];
 
     // public function items()

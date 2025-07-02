@@ -23,6 +23,7 @@
                 <th>Jam</th>
                 <th>Status</th>
                 <th>Bayar</th>
+                <th>Status Reservasi</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -40,6 +41,11 @@
                         </span>
                     </td>
                     <td>Rp {{ number_format($res->jumlah_bayar, 0, ',', '.') }}</td>
+                    <td>
+                        <span class="badge {{ $res->status_reservasi == 'selesai' ? 'bg-success' : 'bg-warning' }}">
+                            {{ ucfirst($res->status_reservasi) }}
+                        </span>
+                    </td>
                     <td>
                        <button class="btn btn-info btn-sm" onclick="showDetail({{ $res->toJson() }}, {{ $res->items->load('menu')->toJson() }})">Detail</button>
                         <button class="btn btn-warning btn-sm" onclick="editStatus({{ $res }})">Edit</button>

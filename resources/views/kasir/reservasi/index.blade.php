@@ -22,8 +22,9 @@
                 <th>No HP</th>
                 <th>Tanggal</th>
                 <th>Jam</th>
-                <th>Status</th>
+                <th>Status Pembayaran</th>
                 <th>Bayar</th>
+                <th>Status Reservasi</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -42,6 +43,11 @@
                         </span>
                     </td>
                     <td>Rp {{ number_format($res->jumlah_bayar, 0, ',', '.') }}</td>
+                    <td>
+                        <span class="badge {{ $res->status_reservasi == 'selesai' ? 'bg-success' : 'bg-warning' }}">
+                            {{ ucfirst($res->status_reservasi) }}
+                        </span>
+                    </td>
                     <td>
                        <button class="btn btn-info btn-sm" onclick="showDetail({{ $res->toJson() }}, {{ $res->items->load('menu')->toJson() }})">Detail</button>
                         <button class="btn btn-warning btn-sm" onclick="editStatus({{ $res }})">Edit</button>
@@ -240,5 +246,10 @@
                 info: "Menampilkan {start} sampai {end} dari {rows} data"
             }
         });
+    </script>
+    <script>
+        setInterval(function () {
+            location.reload();
+        }, 5000); // 5000 ms = 5 detik
     </script>
 @endpush

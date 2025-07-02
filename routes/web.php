@@ -57,8 +57,14 @@ Route::middleware(['auth', 'role:kasir'])->prefix('kasir')->name('kasir.')->grou
 Route::middleware(['auth', 'role:dapur'])->prefix('dapur')->name('dapur.')->group(function () {
     Route::get('/dashboard', fn() => view('dapur.dashboard'))->name('dashboard');
     Route::get('/dapur/orderan', [DapurOrderController::class, 'index'])->name('dapur.orderan.index');
-    Route::post('/dapur/orderan/{id}/selesai', [DapurOrderController::class, 'updateStatus'])->name('dapur.orderan.selesai');
+    // Route::post('/dapur/orderan/{id}/selesai', [DapurOrderController::class, 'updateStatus'])->name('dapur.orderan.selesai');
     Route::get('/dapur/orderan/json', [DapurOrderController::class, 'json'])->name('dapur.orderan.json');
+    // Route::post('/dapur/reservasi/{id}/selesai', [DapurOrderController::class, 'updateStatus'])->name('dapur.reservasi.selesai');
+    Route::post('/dapur/orderan/{id}/selesai',    [DapurOrderController::class, 'updateStatus'])
+      ->name('dapur.orderan.selesai')    ->defaults('tipe', 'order');
+    Route::post('/dapur/reservasi/{id}/selesai', [DapurOrderController::class, 'updateStatus'])
+        ->name('dapur.reservasi.selesai') ->defaults('tipe', 'reservasi');
+
 });
 
 // ✅ ORDER VIA QR / TANPA LOGIN
@@ -69,5 +75,6 @@ Route::get('/reservasi', [ReservationController::class, 'create'])->name('reserv
 Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
 Route::get('/reservasi/{id}/download', [ReservationController::class, 'download'])
      ->name('reservasi.download');
+
 
 

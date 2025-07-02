@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Order;
+use App\Models\Reservation;
+use Illuminate\Http\Request;
 
 class DapurOrderController extends Controller
 {
@@ -17,28 +18,63 @@ class DapurOrderController extends Controller
             ->whereDate('created_at', Carbon::today())
             ->latest()
             ->get();
+        
+        $reservations = Reservation::with(['items.menu'])
+            ->where('status_pembayaran', 'sukses')
+            ->where('status_reservasi', '!=', 'selesai')
+            ->whereDate('tanggal', Carbon::today())
+            ->latest()
+            ->get();
 
-        return view('dapur.orderan.index', compact('orders'));
+        return view('dapur.orderan.index', compact('orders', 'reservations'));
     }
 
-    public function updateStatus(Request $request, $id)
+  public function updateStatus(Request $request, $id, $tipe = 'order')
     {
-        $order = Order::findOrFail($id);
-        $order->update(['status' => 'selesai']);
+        if ($tipe === 'order') {
+            $order = Order::findOrFail($id);
+            $order->update(['status' => 'selesai']);
+        } else {
+            // $tipe = 'reservasi'
+            $reservasi = Reservation::findOrFail($id);
+            $reservasi->update(['status_reservasi' => 'selesai']);   // kolom apa pun yg dipakai
+        }
 
-        return redirect()->route('dapur.dapur.orderan.index')->with('success', 'Status pesanan telah diubah menjadi selesai.');
+        return back()->with('success', 'Status berhasil diubah menjadi selesai.');
+    }
+
+    public function selesaiReservasi($id)
+    {
+        $reservasi = Reservation::findOrFail($id);
+        $reservasi->status_pembayaran = 'selesai'; // atau bisa tambah kolom status_kitchen
+        $reservasi->save();
+
+        return back()->with('success', 'Reservasi ditandai selesai');
     }
 
     public function json()
     {
+        // Order yang SUDAH dibayar & BELUM selesai, hari ini
         $orders = Order::with(['meja', 'items.menu'])
             ->where('status_pembayaran', 'sukses')
             ->where('status', '!=', 'selesai')
-            ->whereDate('created_at', \Carbon\Carbon::today())
+            ->whereDate('created_at', Carbon::today())
             ->latest()
             ->get();
 
-        return response()->json($orders);
+        // Reservasi yang SUDAH dibayar (status_pembayaran = sukses) & untuk tanggal hari ini
+        $reservations = Reservation::with(['items.menu'])
+            ->where('status_pembayaran', 'sukses')
+            ->where('status_reservasi', '!=', 'selesai') // ✅ Tambahkan pengecekan status_reservasi
+            ->whereDate('tanggal', Carbon::today())
+            ->latest()
+            ->get();
+
+        // 👉  kembalikan dalam satu objek JSON
+        return response()->json([
+            'orders'       => $orders,
+            'reservations' => $reservations,
+        ]);
     }
 
 }

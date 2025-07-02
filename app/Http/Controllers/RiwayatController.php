@@ -66,7 +66,7 @@ class RiwayatController extends Controller
         ]);
 
         $from = $request->from . ' 00:00:00';
-        $to = $request->to . ' 23:59:59';
+        $to   = $request->to   . ' 23:59:59';
 
         return Excel::download(new RiwayatExport($from, $to), 'riwayat-transaksi.xlsx');
     }
